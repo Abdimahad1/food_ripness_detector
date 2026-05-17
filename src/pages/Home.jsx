@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import Nav from "../components/Nav.jsx";
+import Nav from "../components/nav.jsx";
 import Footer from "../components/footer.jsx";
 
 import {

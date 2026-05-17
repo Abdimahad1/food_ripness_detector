@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-import Nav from "../components/Nav.jsx";
+import Nav from "../components/nav.jsx";
 import Footer from "../components/footer.jsx";
 
 import { analyzeFruitImage } from "../services/geminiaiService";
