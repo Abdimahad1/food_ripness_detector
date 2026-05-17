@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import Nav from "../components/nav.jsx";
 import Footer from "../components/footer.jsx";
@@ -50,6 +50,10 @@ function Analyze() {
   const [showProcessingModal, setShowProcessingModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   
+  // Refs for auto-scroll in processing modal
+  const stepsContainerRef = useRef(null);
+  const activeStepRef = useRef(null);
+  
   // Rate limiting and usage tracking
   const [requestCount, setRequestCount] = useState(0);
   const [lastRequestTime, setLastRequestTime] = useState(null);
@@ -80,6 +84,16 @@ function Analyze() {
       return () => clearTimeout(timer);
     }
   }, [timeUntilReset]);
+  
+  // Auto-scroll to active step in processing modal
+  useEffect(() => {
+    if (showProcessingModal && activeStepRef.current) {
+      activeStepRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }, [currentStep, showProcessingModal]);
   
   // Check if user is approaching daily limit
   const checkDailyLimit = () => {
@@ -225,17 +239,20 @@ function Analyze() {
       // Start realistic step-by-step processing
       const processingPromise = simulateRealisticProcessing();
 
-      // API CALL with timeout
+      // =====================================================
+      // API CALL WITH TIMEOUT (FIXED - NO DUPLICATION)
+      // =====================================================
       const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => reject(new Error("Request timeout")), 45000);
+        setTimeout(() => {
+          reject(new Error("Request timeout"));
+        }, 120000);
       });
-      
+
       const apiPromise = analyzeFruitImage(formData);
-      
-      // Wait for both processing simulation and API call
-      const [data] = await Promise.all([
-        apiPromise,
-        processingPromise
+
+      const data = await Promise.race([
+        Promise.all([apiPromise, processingPromise]).then(([response]) => response),
+        timeoutPromise
       ]);
 
       // Add artificial delay before showing result
@@ -518,8 +535,11 @@ function Analyze() {
                 </div>
               </div>
 
-              {/* Steps Timeline */}
-              <div className="space-y-3 max-h-96 overflow-y-auto pr-2">
+              {/* Steps Timeline - Auto-scroll container */}
+              <div 
+                ref={stepsContainerRef}
+                className="space-y-3 max-h-96 overflow-y-auto pr-2 scroll-smooth"
+              >
                 {analysisSteps.map((step, index) => {
                   const Icon = step.icon;
                   const isCompleted = index < currentStep;
@@ -529,6 +549,7 @@ function Analyze() {
                   return (
                     <div
                       key={index}
+                      ref={isActive ? activeStepRef : null}
                       className={`relative rounded-xl p-3 transition-all duration-300 ${
                         isActive 
                           ? "bg-green-50 border-l-4 border-green-500 shadow-md" 

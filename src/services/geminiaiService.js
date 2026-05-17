@@ -56,7 +56,7 @@ async (formData) => {
               "multipart/form-data",
           },
 
-          timeout: 60000,
+          timeout: 120000,
         }
       );
 
