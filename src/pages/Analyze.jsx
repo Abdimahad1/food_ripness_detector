@@ -240,19 +240,23 @@ function Analyze() {
       const processingPromise = simulateRealisticProcessing();
 
       // =====================================================
-      // API CALL WITH TIMEOUT (FIXED - NO DUPLICATION)
+      // API CALL WITH INCREASED TIMEOUT (5 MINUTES = 300,000ms)
       // =====================================================
       const timeoutPromise = new Promise((_, reject) => {
         setTimeout(() => {
-          reject(new Error("Request timeout"));
-        }, 120000);
+          reject(new Error("Request timeout - Backend took too long to respond"));
+        }, 300000); // 5 minutes timeout
       });
 
       const apiPromise = analyzeFruitImage(formData);
 
-      const data = await Promise.race([
-        Promise.all([apiPromise, processingPromise]).then(([response]) => response),
-        timeoutPromise
+      // Wait for both API and processing simulation to complete
+      const [apiResponse] = await Promise.all([
+        Promise.race([
+          apiPromise,
+          timeoutPromise
+        ]),
+        processingPromise
       ]);
 
       // Add artificial delay before showing result
@@ -261,7 +265,7 @@ function Analyze() {
       // Increment successful request count
       incrementRequestCount();
 
-      setResult(data);
+      setResult(apiResponse);
       setLoading(false);
       setShowProcessingModal(false); // Close processing modal
       setShowResultModal(true); // Open result modal
@@ -296,7 +300,7 @@ function Analyze() {
       }
       else if (errorMessage.includes("timeout")) {
         setErrorType("TIMEOUT");
-        setError("⏰ Request timed out. Please try again.");
+        setError("⏰ Request timed out after 5 minutes. The server is taking too long to respond. Please try again with a smaller image or later.");
       }
       else {
         setErrorType("UNKNOWN");

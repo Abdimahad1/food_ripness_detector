@@ -43,7 +43,7 @@ async (formData) => {
     );
 
     // =====================================================
-    // SEND REQUEST
+    // SEND REQUEST WITH INCREASED TIMEOUT (5 MINUTES)
     // =====================================================
 
     const response =
@@ -56,7 +56,7 @@ async (formData) => {
               "multipart/form-data",
           },
 
-          timeout: 120000,
+          timeout: 300000, // 5 minutes (300,000 ms)
         }
       );
 
