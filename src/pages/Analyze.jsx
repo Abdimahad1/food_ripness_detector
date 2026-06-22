@@ -1,9 +1,11 @@
+// pages/Analyze.jsx
 import { useState, useEffect, useRef } from "react";
 
 import Nav from "../components/nav.jsx";
 import Footer from "../components/footer.jsx";
 
-import { analyzeFruitImage } from "../services/geminiaiService";
+// IMPORT YOUR CUSTOM MODEL SERVICE
+import { analyzeFruitImage } from "../services/fruitDetectionService.js";
 
 import {
   UploadCloud,
@@ -19,21 +21,17 @@ import {
   Cpu,
   Search,
   BadgeCheck,
-  Clock,
   RefreshCw,
-  TrendingUp,
   Zap,
   Shield,
   Info,
   X,
-  Eye,
-  Maximize2,
-  Minimize2,
   Activity,
   Database,
   Microscope,
   BarChart,
   ThumbsUp,
+  Cpu as CpuIcon,
 } from "lucide-react";
 
 function Analyze() {
@@ -50,14 +48,11 @@ function Analyze() {
   const [showProcessingModal, setShowProcessingModal] = useState(false);
   const [showResultModal, setShowResultModal] = useState(false);
   
-  // Refs for auto-scroll in processing modal
   const stepsContainerRef = useRef(null);
   const activeStepRef = useRef(null);
   
-  // Rate limiting and usage tracking
   const [requestCount, setRequestCount] = useState(0);
   const [lastRequestTime, setLastRequestTime] = useState(null);
-  const [timeUntilReset, setTimeUntilReset] = useState(0);
   const [showQuotaWarning, setShowQuotaWarning] = useState(false);
   
   // Load request count from localStorage
@@ -75,17 +70,6 @@ function Analyze() {
     }
   }, []);
   
-  // Timer for quota reset
-  useEffect(() => {
-    if (timeUntilReset > 0) {
-      const timer = setTimeout(() => {
-        setTimeUntilReset(timeUntilReset - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-  }, [timeUntilReset]);
-  
-  // Auto-scroll to active step in processing modal
   useEffect(() => {
     if (showProcessingModal && activeStepRef.current) {
       activeStepRef.current.scrollIntoView({
@@ -95,7 +79,6 @@ function Analyze() {
     }
   }, [currentStep, showProcessingModal]);
   
-  // Check if user is approaching daily limit
   const checkDailyLimit = () => {
     const DAILY_LIMIT = 50;
     if (requestCount >= DAILY_LIMIT) {
@@ -109,7 +92,6 @@ function Analyze() {
     return true;
   };
   
-  // Increment request count
   const incrementRequestCount = () => {
     const newCount = requestCount + 1;
     setRequestCount(newCount);
@@ -117,50 +99,43 @@ function Analyze() {
   };
 
   // =====================================================
-  // ANALYSIS STEPS WITH DETAILS
+  // ANALYSIS STEPS
   // =====================================================
   const analysisSteps = [
     { 
-      title: "Uploading Image", 
-      icon: UploadCloud, 
-      time: 800,
-      description: "Preparing your image for analysis",
-      details: "Verifying image format and quality..."
-    },
-    { 
-      title: "Processing Image Data", 
+      title: "Processing Image", 
       icon: Cpu, 
-      time: 1200,
-      description: "Converting image to AI-readable format",
-      details: "Optimizing image resolution and encoding..."
+      time: 800,
+      description: "Preparing image for analysis",
+      details: "Optimizing image resolution and preparing data..."
     },
     { 
-      title: "Detecting Fruit Type", 
-      icon: ScanSearch, 
-      time: 1500,
-      description: "Identifying fruit variety",
-      details: "Analyzing shape, color, and texture patterns..."
-    },
-    { 
-      title: "Analyzing Ripeness Level", 
-      icon: Search, 
-      time: 1400,
-      description: "Evaluating freshness indicators",
-      details: "Checking color saturation, firmness signs, and spots..."
-    },
-    { 
-      title: "Generating Recommendation", 
-      icon: Brain, 
-      time: 1300,
-      description: "Creating smart suggestions",
-      details: "Based on ripeness and storage conditions..."
-    },
-    { 
-      title: "Finalizing Results", 
-      icon: BadgeCheck, 
+      title: "Loading Trained Model", 
+      icon: CpuIcon, 
       time: 1000,
-      description: "Preparing your analysis report",
-      details: "Compiling all data and insights..."
+      description: "Loading your custom model",
+      details: "Model accuracy: 86.84%"
+    },
+    { 
+      title: "Analyzing Ripeness", 
+      icon: Search, 
+      time: 1500,
+      description: "Detecting fruit condition",
+      details: "Analyzing color, texture, and patterns..."
+    },
+    { 
+      title: "Generating Results", 
+      icon: Brain, 
+      time: 1200,
+      description: "Creating recommendation",
+      details: "Based on ripeness analysis..."
+    },
+    { 
+      title: "Finalizing", 
+      icon: BadgeCheck, 
+      time: 800,
+      description: "Preparing your report",
+      details: "Compiling all data..."
     },
   ];
 
@@ -195,18 +170,18 @@ function Analyze() {
   };
 
   // =====================================================
-  // SIMULATE REALISTIC AI PROCESSING
+  // SIMULATE PROCESSING
   // =====================================================
-  const simulateRealisticProcessing = async () => {
+  const simulateProcessing = async () => {
     for (let i = 0; i < analysisSteps.length; i++) {
       setCurrentStep(i);
-      const delay = analysisSteps[i].time + Math.random() * 500;
+      const delay = analysisSteps[i].time + Math.random() * 300;
       await new Promise(resolve => setTimeout(resolve, delay));
     }
   };
 
   // =====================================================
-  // HANDLE ANALYZE - OPENS PROCESSING MODAL
+  // HANDLE ANALYZE
   // =====================================================
   const handleAnalyze = async () => {
     if (!selectedImage) {
@@ -217,8 +192,8 @@ function Analyze() {
     
     if (!checkDailyLimit()) return;
     
-    if (lastRequestTime && Date.now() - lastRequestTime < 3000) {
-      const waitTime = Math.ceil((3000 - (Date.now() - lastRequestTime)) / 1000);
+    if (lastRequestTime && Date.now() - lastRequestTime < 2000) {
+      const waitTime = Math.ceil((2000 - (Date.now() - lastRequestTime)) / 1000);
       setError(`Please wait ${waitTime} seconds before another analysis. 🕐`);
       setErrorType("RATE_LIMIT");
       return;
@@ -231,80 +206,58 @@ function Analyze() {
       setCurrentStep(0);
       setLastRequestTime(Date.now());
       setShowResultModal(false);
-      setShowProcessingModal(true); // Open processing modal immediately
+      setShowProcessingModal(true);
 
-      const formData = new FormData();
-      formData.append("image", selectedImage);
+      const processingPromise = simulateProcessing();
+      const apiPromise = analyzeFruitImage(selectedImage);
 
-      // Start realistic step-by-step processing
-      const processingPromise = simulateRealisticProcessing();
-
-      // =====================================================
-      // API CALL WITH INCREASED TIMEOUT (5 MINUTES = 300,000ms)
-      // =====================================================
-      const timeoutPromise = new Promise((_, reject) => {
-        setTimeout(() => {
-          reject(new Error("Request timeout - Backend took too long to respond"));
-        }, 300000); // 5 minutes timeout
-      });
-
-      const apiPromise = analyzeFruitImage(formData);
-
-      // Wait for both API and processing simulation to complete
       const [apiResponse] = await Promise.all([
-        Promise.race([
-          apiPromise,
-          timeoutPromise
-        ]),
+        apiPromise,
         processingPromise
       ]);
 
-      // Add artificial delay before showing result
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 500));
       
-      // Increment successful request count
       incrementRequestCount();
 
-      setResult(apiResponse);
+      const responseData = apiResponse.data || apiResponse;
+      
+      setResult({
+        fruit: responseData.fruit || 'Fruit',
+        ripeness: responseData.ripeness || 'unknown',
+        confidence: responseData.confidence || 0,
+        recommendation: responseData.recommendation || 'No recommendation available',
+        details: responseData.details || 'Analysis complete',
+        status: responseData.status || 'Unknown',
+        emoji: responseData.emoji || '🍎',
+        all_scores: responseData.all_scores || {},
+        model: responseData.model || 'Custom CNN (86.84%)'
+      });
+      
       setLoading(false);
-      setShowProcessingModal(false); // Close processing modal
-      setShowResultModal(true); // Open result modal
+      setShowProcessingModal(false);
+      setShowResultModal(true);
       setShowQuotaWarning(false);
 
     } catch (err) {
       console.error("Analysis Error:", err);
       setLoading(false);
-      setShowProcessingModal(false); // Close processing modal on error
+      setShowProcessingModal(false);
       
       const errorMessage = err.message || err.toString();
       
-      if (errorMessage.includes("429") || errorMessage.includes("quota") || errorMessage.includes("Too Many Requests")) {
-        const retryMatch = errorMessage.match(/retry in (\d+(?:\.\d+)?)\s*s/i);
-        const retrySeconds = retryMatch ? Math.ceil(parseFloat(retryMatch[1])) : 60;
-        
-        setTimeUntilReset(retrySeconds);
-        setErrorType("QUOTA_EXCEEDED");
-        setError(`⚠️ API quota exceeded! Please try again in ${retrySeconds} seconds. ⏱️`);
-      } 
-      else if (errorMessage.includes("daily") || errorMessage.includes("day")) {
-        setErrorType("DAILY_LIMIT");
-        setError("📅 You've reached today's analysis limit. Please try again tomorrow!");
-      }
-      else if (errorMessage.includes("API key") || errorMessage.includes("invalid")) {
-        setErrorType("API_ERROR");
-        setError("🔑 Service authentication error. Please contact support.");
-      }
-      else if (errorMessage.includes("network") || errorMessage.includes("fetch") || errorMessage.includes("Failed to fetch")) {
+      if (errorMessage.includes("network") || errorMessage.includes("fetch") || errorMessage.includes("Failed to fetch")) {
         setErrorType("NETWORK_ERROR");
-        setError("🌐 Network error! Please check your internet connection and try again.");
-      }
-      else if (errorMessage.includes("timeout")) {
+        setError("🌐 Network error! Please check if backend server is running on http://localhost:5000");
+      } else if (errorMessage.includes("timeout")) {
         setErrorType("TIMEOUT");
-        setError("⏰ Request timed out after 5 minutes. The server is taking too long to respond. Please try again with a smaller image or later.");
-      }
-      else {
+        setError("⏰ Request timed out. Please try again with a smaller image.");
+      } else if (errorMessage.includes("ML server")) {
+        setErrorType("ML_SERVER_ERROR");
+        setError("🔬 ML server not available. Please make sure Python server is running.");
+      } else {
         setErrorType("UNKNOWN");
-        setError("❌ Failed to analyze image. Please try again in a few moments.");
+        setError("❌ Failed to analyze image. Please try again.");
       }
     }
   };
@@ -325,7 +278,7 @@ function Analyze() {
   };
 
   // =====================================================
-  // GET RIPENESS COLOR
+  // HELPERS
   // =====================================================
   const getRipenessColor = (ripeness) => {
     switch(ripeness?.toLowerCase()) {
@@ -337,9 +290,6 @@ function Analyze() {
     }
   };
 
-  // =====================================================
-  // GET RIPENESS EMOJI
-  // =====================================================
   const getRipenessEmoji = (ripeness) => {
     switch(ripeness?.toLowerCase()) {
       case "ripe": return "🍎✨";
@@ -354,12 +304,12 @@ function Analyze() {
     <div className="bg-gradient-to-br from-[#F7FAF7] to-white min-h-screen">
       <Nav />
 
-      {/* HERO - COMPACT */}
+      {/* HERO */}
       <section className="px-4 pt-20 pb-8">
         <div className="max-w-4xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 bg-white border border-gray-200 px-4 py-1.5 rounded-full shadow-sm mb-6">
-            <Sparkles className="w-3.5 h-3.5 text-orange-500" />
-            <span className="text-xs text-gray-600 font-medium">AI Fruit Detection System</span>
+            <Sparkles className="w-3.5 h-3.5 text-green-500" />
+            <span className="text-xs text-gray-600 font-medium">Trained Model • 86.84% Accuracy</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-extrabold text-[#07130A] leading-tight">
@@ -368,24 +318,22 @@ function Analyze() {
           </h1>
 
           <p className="mt-4 text-base text-gray-600 max-w-2xl mx-auto">
-            Upload a fruit image and let AI determine ripeness, freshness, and provide smart recommendations.
+            Upload a fruit image and let our custom model determine ripeness, freshness, and provide smart recommendations.
           </p>
           
-          {/* Daily Usage Counter - Compact */}
           <div className="mt-4 inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm px-3 py-1.5 rounded-full border border-gray-200 text-sm">
             <BarChart3 className="w-3.5 h-3.5 text-green-500" />
             <span className="text-gray-600">
               Today: <span className="font-bold text-green-600">{requestCount}</span>
               <span className="text-gray-400">/50</span>
             </span>
-            {showQuotaWarning && requestCount >= 45 && (
-              <span className="text-xs text-orange-500 ml-1">⚠️ Limit near</span>
-            )}
+            <span className="text-xs text-gray-400 ml-2">|</span>
+            <span className="text-xs text-green-600">🧠 Trained Model</span>
           </div>
         </div>
       </section>
 
-      {/* MAIN SECTION - COMPACT UPLOAD */}
+      {/* MAIN SECTION */}
       <section className="px-4 pb-20">
         <div className="max-w-2xl mx-auto">
           <div className="bg-white rounded-2xl border border-gray-100 shadow-lg p-6">
@@ -397,7 +345,7 @@ function Analyze() {
               </div>
 
               <h2 className="mt-4 text-xl font-bold text-[#07130A]">Upload Fruit Image</h2>
-              <p className="mt-2 text-sm text-gray-500">Choose a fruit image for AI analysis</p>
+              <p className="mt-2 text-sm text-gray-500">Choose a fruit image for analysis</p>
 
               <input
                 type="file"
@@ -423,11 +371,11 @@ function Analyze() {
               </div>
               <div className="bg-[#F7FAF7] rounded-xl p-3 text-center">
                 <Brain className="w-4 h-4 text-green-500 mx-auto mb-1" />
-                <p className="text-xs text-gray-600">AI Powered</p>
+                <p className="text-xs text-gray-600">Custom Model</p>
               </div>
               <div className="bg-[#F7FAF7] rounded-xl p-3 text-center">
                 <Shield className="w-4 h-4 text-green-500 mx-auto mb-1" />
-                <p className="text-xs text-gray-600">Secure</p>
+                <p className="text-xs text-gray-600">86.84% Acc</p>
               </div>
             </div>
 
@@ -475,20 +423,17 @@ function Analyze() {
             {/* ERROR DISPLAY */}
             {error && (
               <div className={`mt-4 rounded-xl p-3 ${
-                errorType === "QUOTA_EXCEEDED" || errorType === "DAILY_LIMIT"
+                errorType === "QUOTA_EXCEEDED" || errorType === "DAILY_LIMIT" || errorType === "QUOTA_DAILY"
                   ? "bg-orange-50 border border-orange-200"
                   : "bg-red-50 border border-red-100"
               }`}>
                 <div className="flex items-start gap-2">
                   <AlertCircle className={`w-4 h-4 mt-0.5 ${
-                    errorType === "QUOTA_EXCEEDED" || errorType === "DAILY_LIMIT"
+                    errorType === "QUOTA_EXCEEDED" || errorType === "DAILY_LIMIT" || errorType === "QUOTA_DAILY"
                       ? "text-orange-500"
                       : "text-red-500"
                   }`} />
                   <p className="text-xs text-gray-700 flex-1">{error}</p>
-                  {timeUntilReset > 0 && (
-                    <p className="text-xs font-mono text-blue-600">{Math.floor(timeUntilReset / 60)}:{String(timeUntilReset % 60).padStart(2, '0')}</p>
-                  )}
                 </div>
               </div>
             )}
@@ -506,26 +451,23 @@ function Analyze() {
       </section>
 
       {/* ===================================================== */}
-      {/* PROCESSING MODAL - FULL SCREEN POPUP WITH STEPS */}
+      {/* PROCESSING MODAL */}
       {/* ===================================================== */}
       {showProcessingModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300">
           <div className="bg-white rounded-2xl max-w-lg w-full shadow-2xl animate-in zoom-in-95 duration-300">
             
-            {/* Modal Header */}
             <div className="bg-gradient-to-r from-green-500 to-lime-400 rounded-t-2xl px-6 py-4">
               <div className="flex items-center gap-3">
                 <Activity className="w-6 h-6 text-white animate-pulse" />
                 <div>
-                  <h2 className="text-lg font-bold text-white">AI Processing</h2>
+                  <h2 className="text-lg font-bold text-white">Processing</h2>
                   <p className="text-xs text-white/80">Analyzing your fruit image...</p>
                 </div>
               </div>
             </div>
 
-            {/* Modal Content - Steps */}
             <div className="p-6">
-              {/* Progress bar */}
               <div className="mb-6">
                 <div className="flex justify-between text-xs text-gray-500 mb-1">
                   <span>Progress</span>
@@ -539,16 +481,11 @@ function Analyze() {
                 </div>
               </div>
 
-              {/* Steps Timeline - Auto-scroll container */}
-              <div 
-                ref={stepsContainerRef}
-                className="space-y-3 max-h-96 overflow-y-auto pr-2 scroll-smooth"
-              >
+              <div ref={stepsContainerRef} className="space-y-3 max-h-96 overflow-y-auto pr-2 scroll-smooth">
                 {analysisSteps.map((step, index) => {
                   const Icon = step.icon;
                   const isCompleted = index < currentStep;
                   const isActive = index === currentStep;
-                  const isPending = index > currentStep;
                   
                   return (
                     <div
@@ -563,7 +500,6 @@ function Analyze() {
                       }`}
                     >
                       <div className="flex items-start gap-3">
-                        {/* Icon */}
                         <div
                           className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
                             isActive
@@ -576,7 +512,6 @@ function Analyze() {
                           {isCompleted ? <CheckCircle2 className="w-5 h-5" /> : <Icon className="w-5 h-5" />}
                         </div>
                         
-                        {/* Content */}
                         <div className="flex-1">
                           <div className="flex items-center justify-between">
                             <h3 className={`font-semibold text-sm ${
@@ -607,12 +542,11 @@ function Analyze() {
                 })}
               </div>
 
-              {/* Processing Tips */}
               <div className="mt-6 p-3 bg-blue-50 rounded-xl">
                 <div className="flex items-center gap-2">
                   <Zap className="w-4 h-4 text-blue-500" />
                   <p className="text-xs text-blue-700">
-                    AI is analyzing fruit characteristics including color, texture, and size...
+                    Using trained model with 86.84% accuracy
                   </p>
                 </div>
               </div>
@@ -622,13 +556,12 @@ function Analyze() {
       )}
 
       {/* ===================================================== */}
-      {/* RESULT MODAL - FULL RESULTS POPUP */}
+      {/* RESULT MODAL */}
       {/* ===================================================== */}
       {showResultModal && result && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-in fade-in duration-300 overflow-y-auto">
           <div className="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl animate-in zoom-in-95 duration-300">
             
-            {/* Modal Header */}
             <div className="sticky top-0 bg-white border-b border-gray-100 px-6 py-4 flex justify-between items-center">
               <div className="flex items-center gap-2">
                 <Brain className="w-6 h-6 text-green-500" />
@@ -642,10 +575,8 @@ function Analyze() {
               </button>
             </div>
 
-            {/* Modal Content */}
             <div className="p-6 space-y-6">
               
-              {/* Celebration Badge */}
               <div className="text-center">
                 <div className="inline-flex items-center gap-2 bg-gradient-to-r from-green-100 to-emerald-100 px-4 py-2 rounded-full">
                   <Sparkles className="w-4 h-4 text-green-600" />
@@ -653,7 +584,7 @@ function Analyze() {
                 </div>
               </div>
 
-              {/* Image and Fruit Preview */}
+              {/* Image and Result */}
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="bg-[#F7FAF7] rounded-xl overflow-hidden">
                   <img src={preview} alt="Analyzed fruit" className="w-full h-48 object-cover" />
@@ -661,25 +592,26 @@ function Analyze() {
                 <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl p-4 text-center flex flex-col justify-center">
                   <Apple className="w-10 h-10 text-green-600 mx-auto mb-2" />
                   <p className="text-sm text-gray-500">Detected Fruit</p>
-                  <p className="text-3xl font-extrabold text-[#07130A] capitalize">{result.fruit}</p>
+                  <p className="text-3xl font-extrabold text-[#07130A] capitalize">{result.fruit || "Fruit"}</p>
                   <div className={`inline-flex self-center mt-3 px-3 py-1 rounded-full text-sm font-semibold ${getRipenessColor(result.ripeness)}`}>
-                    {getRipenessEmoji(result.ripeness)} {result.ripeness}
+                    {getRipenessEmoji(result.ripeness)} {result.ripeness || "Unknown"}
                   </div>
+                  <p className="text-xs text-gray-400 mt-2">🧠 {result.model || 'Custom CNN'}</p>
                 </div>
               </div>
 
-              {/* Confidence Score */}
+              {/* Confidence */}
               <div className="bg-[#F7FAF7] rounded-xl p-5">
                 <div className="flex justify-between items-center mb-3">
                   <div className="flex items-center gap-2">
                     <BarChart className="w-5 h-5 text-green-600" />
                     <h3 className="font-bold text-[#07130A]">Confidence Score</h3>
                   </div>
-                  <span className="text-3xl font-bold text-green-600">{result.confidence}%</span>
+                  <span className="text-3xl font-bold text-green-600">{result.confidence || 0}%</span>
                 </div>
                 <div className="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
                   <div
-                    style={{ width: `${result.confidence}%` }}
+                    style={{ width: `${result.confidence || 0}%` }}
                     className="h-full bg-gradient-to-r from-green-500 to-lime-400 rounded-full transition-all duration-1000"
                   ></div>
                 </div>
@@ -690,22 +622,22 @@ function Analyze() {
                 </p>
               </div>
 
-              {/* AI Recommendation */}
+              {/* Recommendation */}
               <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-5 border border-green-100">
                 <div className="flex items-center gap-2 mb-3">
                   <ThumbsUp className="w-5 h-5 text-green-600" />
-                  <h3 className="font-bold text-[#07130A]">AI Recommendation</h3>
+                  <h3 className="font-bold text-[#07130A]">Recommendation</h3>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{result.recommendation}</p>
+                <p className="text-gray-700 leading-relaxed">{result.recommendation || "No recommendation available"}</p>
               </div>
 
-              {/* Detection Details */}
+              {/* Details */}
               <div className="bg-orange-50 rounded-xl p-5 border border-orange-100">
                 <div className="flex items-center gap-2 mb-3">
                   <Microscope className="w-5 h-5 text-orange-500" />
                   <h3 className="font-bold text-[#07130A]">Detection Details</h3>
                 </div>
-                <p className="text-gray-700 leading-relaxed">{result.details}</p>
+                <p className="text-gray-700 leading-relaxed">{result.details || "No details available"}</p>
               </div>
 
               {/* Additional Info */}
@@ -715,15 +647,26 @@ function Analyze() {
                   <p className="text-xs font-semibold text-blue-700">Analysis Information</p>
                 </div>
                 <div className="grid grid-cols-2 gap-3 text-xs text-gray-600">
-                  <div>Powered by: Google Gemini AI</div>
-                  <div>Analysis ID: {Math.random().toString(36).substr(2, 8).toUpperCase()}</div>
+                  <div>Powered by: Trained Model</div>
+                  <div>Accuracy: 86.84%</div>
                   <div>Timestamp: {new Date().toLocaleTimeString()}</div>
                   <div>Status: Complete ✓</div>
                 </div>
+                {result.all_scores && (
+                  <div className="mt-2 pt-2 border-t border-blue-200">
+                    <p className="text-xs font-semibold text-blue-700 mb-1">All Scores:</p>
+                    <div className="flex gap-4 text-xs">
+                      {Object.entries(result.all_scores).map(([key, value]) => (
+                        <span key={key} className="text-gray-600">
+                          {key}: {(value * 100).toFixed(1)}%
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Modal Footer */}
             <div className="sticky bottom-0 bg-white border-t border-gray-100 px-6 py-4 flex gap-3">
               <button
                 onClick={() => {

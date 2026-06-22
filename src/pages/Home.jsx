@@ -33,7 +33,6 @@ function Home() {
 
       {/* HERO SECTION - MODERN & BOLD */}
       <section className="w-full py-20 px-4 relative overflow-hidden">
-        {/* Background decoration */}
         <div className="absolute inset-0 overflow-hidden">
           <div className="absolute -top-40 -right-40 w-80 h-80 bg-green-200 rounded-full blur-3xl opacity-20"></div>
           <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-lime-200 rounded-full blur-3xl opacity-20"></div>
@@ -43,7 +42,7 @@ function Home() {
           <div className="inline-flex items-center gap-2 bg-white border border-gray-200 px-5 py-2 rounded-full shadow-sm mb-8 animate-in fade-in slide-in-from-top-5 duration-500">
             <Sparkles className="w-4 h-4 text-orange-500" />
             <span className="text-sm text-gray-600 font-medium">
-              Powered by Google Gemini AI
+              Trained Model • 86.84% Accuracy
             </span>
           </div>
 
@@ -56,7 +55,7 @@ function Home() {
           </h1>
 
           <p className="max-w-3xl mx-auto mt-6 text-lg md:text-xl text-gray-600 leading-relaxed animate-in fade-in duration-1000 delay-100">
-            Upload a fruit image and let Google's Gemini AI instantly detect 
+            Upload a fruit image and let our custom model instantly detect 
             ripeness levels with confidence scores and smart recommendations.
           </p>
 
@@ -87,7 +86,7 @@ function Home() {
         </div>
       </section>
 
-      {/* STATS SECTION - NEW */}
+      {/* STATS SECTION */}
       <section className="px-4 py-16 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -95,8 +94,8 @@ function Home() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-100 text-green-600 mb-4">
                 <TrendingUp className="w-8 h-8" />
               </div>
-              <p className="text-3xl font-bold text-[#07130A]">95%+</p>
-              <p className="text-gray-600 mt-2">Detection Accuracy</p>
+              <p className="text-3xl font-bold text-[#07130A]">86.84%</p>
+              <p className="text-gray-600 mt-2">Model Accuracy</p>
             </div>
             <div className="text-center">
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-100 text-green-600 mb-4">
@@ -109,14 +108,14 @@ function Home() {
               <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-green-100 text-green-600 mb-4">
                 <Award className="w-8 h-8" />
               </div>
-              <p className="text-3xl font-bold text-[#07130A]">50+</p>
-              <p className="text-gray-600 mt-2">Fruit Types Supported</p>
+              <p className="text-3xl font-bold text-[#07130A]">3</p>
+              <p className="text-gray-600 mt-2">Ripeness Categories</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* HOW IT WORKS - MODERNIZED */}
+      {/* HOW IT WORKS */}
       <section className="px-4 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -141,8 +140,8 @@ function Home() {
               },
               {
                 icon: <Cpu className="w-8 h-8" />,
-                title: "AI Analysis",
-                description: "Gemini AI processes your image",
+                title: "Model Analysis",
+                description: "Custom model processes your image",
                 details: "Analyzes color, texture, and quality",
               },
               {
@@ -171,7 +170,7 @@ function Home() {
         </div>
       </section>
 
-      {/* FEATURES - ENHANCED */}
+      {/* FEATURES */}
       <section className="px-4 py-20 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-16">
@@ -182,7 +181,7 @@ function Home() {
               Built for everyday freshness
             </h2>
             <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
-              Advanced AI technology to help you make smarter food decisions
+              Advanced model technology to help you make smarter food decisions
             </p>
           </div>
 
@@ -202,14 +201,14 @@ function Home() {
               },
               {
                 icon: <Brain className="w-6 h-6" />,
-                title: "Gemini AI Powered",
-                text: "Powered by Google's latest Gemini AI technology.",
+                title: "Custom Model",
+                text: "Powered by a custom trained model with 86.84% accuracy.",
                 color: "from-purple-500 to-pink-500",
               },
               {
                 icon: <BarChart3 className="w-6 h-6" />,
                 title: "Confidence Scores",
-                text: "Know exactly how confident the AI is about each result.",
+                text: "Know exactly how confident the model is about each result.",
                 color: "from-green-500 to-lime-500",
               },
               {
@@ -240,7 +239,7 @@ function Home() {
         </div>
       </section>
 
-      {/* DEMO PREVIEW SECTION - REPLACES UPLOAD SECTION */}
+      {/* DEMO PREVIEW SECTION */}
       <section className="px-4 py-20">
         <div className="max-w-6xl mx-auto">
           <div className="bg-gradient-to-r from-green-600 to-lime-500 rounded-3xl overflow-hidden shadow-2xl">
@@ -251,7 +250,7 @@ function Home() {
                   Ready to check your fruit's freshness?
                 </h2>
                 <p className="text-white/90 mb-6 leading-relaxed">
-                  Join thousands of users using AI to reduce food waste and make smarter decisions about their fruit.
+                  Join users using our custom model to reduce food waste and make smarter decisions about their fruit.
                 </p>
                 <button
                   onClick={handleStartAnalysis}
@@ -281,7 +280,7 @@ function Home() {
         </div>
       </section>
 
-      {/* CTA SECTION - SIMPLIFIED */}
+      {/* CTA SECTION */}
       <section className="px-4 pb-24">
         <div className="max-w-4xl mx-auto text-center">
           <div className="rounded-3xl bg-gradient-to-r from-green-500 to-lime-400 py-16 px-8 shadow-2xl shadow-green-200">
@@ -289,7 +288,7 @@ function Home() {
               Start analyzing fruits now
             </h2>
             <p className="mt-4 text-white/90 text-lg">
-              Experience the power of AI fruit ripeness detection
+              Experience the power of custom fruit ripeness detection
             </p>
             <button
               onClick={handleStartAnalysis}

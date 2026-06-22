@@ -36,46 +36,47 @@ function About() {
           <div className="inline-flex items-center gap-2 bg-white border border-gray-200 px-5 py-2 rounded-full shadow-sm mb-8 animate-in fade-in slide-in-from-top-5 duration-500">
             <Sparkles className="w-4 h-4 text-orange-500" />
             <span className="text-sm text-gray-600 font-medium">
-              About Our AI Platform
+              About Our Custom Model
             </span>
           </div>
 
           <h1 className="text-5xl md:text-6xl font-extrabold text-[#07130A] leading-tight animate-in fade-in slide-in-from-bottom-5 duration-700">
             Smart Fruit Detection
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-lime-500"> Powered by Gemini AI</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-500 to-lime-500"> Powered by Custom Model</span>
           </h1>
 
           <p className="mt-6 text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed animate-in fade-in duration-1000 delay-100">
-            RipeAI is an intelligent fruit ripeness detection platform using Google's 
-            Gemini AI to help users identify fruit freshness instantly through advanced image analysis.
+            Our platform uses a custom trained model for fruit ripeness detection,
+            helping users identify fruit freshness instantly through advanced image analysis
+            with 86.84% accuracy.
           </p>
         </div>
       </section>
 
-      {/* MISSION SECTION - NEW */}
+      {/* MISSION SECTION */}
       <section className="px-6 pb-16">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-8 md:p-12 text-center border border-green-100">
             <Heart className="w-12 h-12 text-green-500 mx-auto mb-4" />
             <h2 className="text-3xl font-bold text-[#07130A] mb-4">Our Mission</h2>
             <p className="text-gray-700 leading-relaxed text-lg">
-              To reduce global food waste by providing accessible AI technology 
-              that helps people make informed decisions about fruit freshness 
+              To reduce global food waste by providing accessible technology
+              that helps people make informed decisions about fruit freshness
               and quality.
             </p>
           </div>
         </div>
       </section>
 
-      {/* TECH STACK HIGHLIGHT - NEW */}
+      {/* TECH STACK HIGHLIGHT */}
       <section className="px-6 pb-16">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-extrabold text-[#07130A]">
-              Powered by Industry-Leading Technology
+              Powered by Custom Trained Model
             </h2>
             <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
-              Built with cutting-edge tools and Google's most advanced AI models
+              Built with a custom CNN model trained on thousands of fruit images
             </p>
           </div>
 
@@ -83,17 +84,17 @@ function About() {
             <div className="bg-white rounded-2xl p-8 border border-gray-100 shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-center gap-3 mb-4">
                 <Cpu className="w-8 h-8 text-green-500" />
-                <h3 className="text-xl font-bold text-[#07130A]">Google Gemini AI</h3>
+                <h3 className="text-xl font-bold text-[#07130A]">Custom CNN Model</h3>
               </div>
               <p className="text-gray-600 leading-relaxed">
-                Our platform leverages Google's state-of-the-art Gemini AI model for 
-                accurate fruit detection and ripeness analysis. The AI processes visual 
-                data including color, texture, size, and surface patterns to determine 
-                freshness levels with high confidence.
+                Our platform uses a custom Convolutional Neural Network trained on
+                thousands of fruit images. The model processes visual data including
+                color, texture, size, and surface patterns to determine freshness
+                levels with 86.84% accuracy.
               </p>
               <div className="mt-4 flex gap-2">
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Vision Capabilities</span>
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">Real-time Analysis</span>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">86.84% Accuracy</span>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">64x64 Input</span>
               </div>
             </div>
 
@@ -103,14 +104,14 @@ function About() {
                 <h3 className="text-xl font-bold text-[#07130A]">Modern Architecture</h3>
               </div>
               <p className="text-gray-600 leading-relaxed">
-                Built with React and Node.js, our platform ensures fast, responsive 
-                experiences across all devices. The backend is optimized for quick 
-                image processing and AI inference, delivering results in seconds.
+                Built with React, Node.js, and Python Flask, our platform ensures fast,
+                responsive experiences across all devices. The backend is optimized for
+                quick image processing and model inference, delivering results in seconds.
               </p>
               <div className="mt-4 flex gap-2">
                 <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">React 18</span>
                 <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Node.js</span>
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Tailwind CSS</span>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Python Flask</span>
               </div>
             </div>
           </div>
@@ -133,8 +134,8 @@ function About() {
             {[
               {
                 icon: <Brain className="w-6 h-6" />,
-                title: "Gemini AI Detection",
-                text: "Advanced computer vision powered by Google's Gemini AI for accurate fruit analysis.",
+                title: "Custom Model",
+                text: "Our custom CNN model is trained specifically for fruit ripeness detection with 86.84% accuracy.",
               },
               {
                 icon: <Shield className="w-6 h-6" />,
@@ -177,7 +178,7 @@ function About() {
         </div>
       </section>
 
-      {/* TECHNOLOGIES - UPDATED WITH GEMINI */}
+      {/* TECHNOLOGIES */}
       <section className="px-6 pb-16">
         <div className="max-w-6xl mx-auto bg-white rounded-3xl p-8 md:p-12 border border-gray-100 shadow-xl">
           <div className="text-center mb-10">
@@ -194,7 +195,7 @@ function About() {
               { name: "React 18", icon: "⚛️", color: "from-cyan-500 to-blue-500" },
               { name: "Node.js", icon: "🟢", color: "from-green-500 to-emerald-500" },
               { name: "Tailwind CSS", icon: "🎨", color: "from-sky-500 to-indigo-500" },
-              { name: "Gemini AI", icon: "🤖", color: "from-purple-500 to-pink-500" },
+              { name: "Python Flask", icon: "🐍", color: "from-purple-500 to-pink-500" },
             ].map((tech, index) => (
               <div
                 key={index}
@@ -211,7 +212,7 @@ function About() {
 
           <div className="mt-8 p-4 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl text-center">
             <p className="text-sm text-gray-700">
-              ✨ <span className="font-semibold">Gemini AI</span> provides advanced vision capabilities for accurate fruit detection and ripeness analysis
+              ✨ <span className="font-semibold">Custom CNN Model</span> with 86.84% accuracy for fruit ripeness detection
             </p>
           </div>
         </div>
@@ -228,13 +229,13 @@ function About() {
             </div>
             <div className="text-center bg-white rounded-2xl p-8 shadow-md">
               <TrendingUp className="w-10 h-10 text-green-500 mx-auto mb-3" />
-              <p className="text-3xl font-bold text-[#07130A]">95%</p>
-              <p className="text-gray-600 mt-1">Accuracy Rate</p>
+              <p className="text-3xl font-bold text-[#07130A]">86.84%</p>
+              <p className="text-gray-600 mt-1">Model Accuracy</p>
             </div>
             <div className="text-center bg-white rounded-2xl p-8 shadow-md">
               <CheckCircle2 className="w-10 h-10 text-green-500 mx-auto mb-3" />
-              <p className="text-3xl font-bold text-[#07130A]">50+</p>
-              <p className="text-gray-600 mt-1">Fruit Types</p>
+              <p className="text-3xl font-bold text-[#07130A]">3</p>
+              <p className="text-gray-600 mt-1">Ripeness Categories</p>
             </div>
           </div>
         </div>
@@ -248,7 +249,7 @@ function About() {
               Ready to try it yourself?
             </h2>
             <p className="mt-4 text-white/90 text-lg">
-              Experience AI-powered fruit ripeness detection
+              Experience custom model fruit ripeness detection
             </p>
             <button
               onClick={() => navigate("/analyze")}
